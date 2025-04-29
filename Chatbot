@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Health Chatbot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #00b4d8, #0081a7);
+        padding: 0;
+        margin: 0;
+      }
+
+      nav {
+        background-color: #023e8a;
+        display: flex;
+        justify-content: center;
+        padding: 1rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 999;
+      }
+
+      nav a {
+        color: white;
+        margin: 0 1rem;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+      }
+
+      nav a:hover {
+        color: #90e0ef;
+      }
+
+      .chat-container {
+        width: 100%;
+        max-width: 600px;
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 1.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        animation: fadeIn 1.5s ease-out;
+        margin: 3rem auto;
+      }
+
+      @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+      }
+
+      .messages {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        max-height: 500px;
+        overflow-y: auto;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        border-radius: 15px;
+        background-color: #f0f8ff;
+      }
+
+      .bot-message,
+      .user-message {
+        padding: 1rem;
+        border-radius: 15px;
+        max-width: 80%;
+        font-size: 1.1rem;
+        animation: popIn 0.5s ease-out;
+      }
+
+      .bot-message {
+        background-color: #00b4d8;
+        color: white;
+        align-self: flex-start;
+      }
+
+      .user-message {
+        background-color: #e0e0e0;
+        color: #333;
+        align-self: flex-end;
+      }
+
+      input[type="text"] {
+        padding: 1rem;
+        font-size: 1rem;
+        width: calc(100% - 2rem);
+        border-radius: 15px;
+        border: 2px solid #0077b6;
+        outline: none;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      input[type="text"]:focus {
+        border-color: #00b4d8;
+      }
+
+      button {
+        padding: 1rem;
+        background-color: #0077b6;
+        color: white;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        font-size: 1.2rem;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #00b4d8;
+      }
+
+      .emoji {
+        font-size: 2rem;
+        margin-left: 5px;
+      }
+
+      .sticker {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-top: 10px;
+        animation: bounce 0.5s ease-in-out infinite;
+      }
+
+      @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+      }
+
+      .sticker:hover {
+        transform: scale(1.1);
+      }
+
+      .back-button {
+        padding: 1rem;
+        background-color: #ff6f61;
+        color: white;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        font-size: 1.2rem;
+        text-align: center;
+        margin-top: 1rem;
+        transition: background-color 0.3s ease;
+        display: block;
+        width: 100%;
+      }
+
+      .back-button:hover {
+        background-color: #ff8f7d;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">HealthCare</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="Chatbot.html"><i class="fas fa-info-circle"></i>Chatbot </a></li>
+            <li class="nav-item"><a class="nav-link" href="Home.html"><i class="fas fa-calendar-check"></i>Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="Patientcare.html"><i class="fas fa-calendar-check"></i> Patientcare</a></li>
+            <li class="nav-item"><a class="nav-link" href="symptoms.html"><i class="fas fa-info-circle"></i>symptoms </a></li>
+            <li class="nav-item"><a class="nav-link" href="appointment.html"><i class="fas fa-calendar-check"></i> Appointment</a></li>
+            <li class="nav-item"><a class="nav-link" href="locator.html"><i class="fas fa-calendar-check"></i> locatort</a></li>
+            <li class="nav-item"><a class="nav-link" href="Contactinfo.html"><i class="fas fa-calendar-check"></i> Contact info</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="chat-container">
+      <div class="messages" id="messages"></div>
+      <input type="text" id="userInput" placeholder="Ask the bot about your health..." />
+      <button onclick="sendMessage()">Send</button>
+      <button class="back-button" onclick="goBackHome()">Back to Home</button>
+    </div>
+
+    <script>
+      const messages = document.getElementById("messages");
+
+      function sendMessage() {
+        const userInput = document.getElementById("userInput").value;
+        if (userInput.trim() === "") return;
+
+        addMessage("user", userInput);
+
+        setTimeout(() => {
+          getBotResponse(userInput);
+        }, 1000);
+
+        document.getElementById("userInput").value = "";
+      }
+
+      function addMessage(sender, text) {
+        const message = document.createElement("div");
+        message.classList.add(sender === "bot" ? "bot-message" : "user-message");
+        message.innerText = text;
+
+        if (sender === "bot") {
+          if (text.includes("headache")) message.innerHTML += ` <span class="emoji">🤕</span>`;
+          else if (text.includes("fever")) message.innerHTML += ` <span class="emoji">🤒</span>`;
+          else if (text.includes("cough")) message.innerHTML += ` <span class="emoji">🤧</span>`;
+          else if (text.includes("sore throat")) message.innerHTML += ` <span class="emoji">🗣</span>`;
+          else if (text.includes("fatigue")) message.innerHTML += ` <span class="emoji">😴</span>`;
+          else if (text.includes("nausea")) message.innerHTML += ` <span class="emoji">🤢</span>`;
+          else message.innerHTML += ` <span class="emoji">❓</span>`;
+
+          const sticker = document.createElement("img");
+          sticker.src = "https://via.placeholder.com/50";
+          sticker.classList.add("sticker");
+          message.appendChild(sticker);
+        }
+
+        messages.appendChild(message);
+        messages.scrollTop = messages.scrollHeight;
+      }
+
+      function getBotResponse(userMessage) {
+        const msg = userMessage.toLowerCase();
+        let botResponse = "";
+
+        if (msg.includes("headache")) botResponse = "Try resting and drinking water. Use a cold compress if needed.";
+        else if (msg.includes("fever")) botResponse = "Stay hydrated and monitor your temperature.";
+        else if (msg.includes("cough")) botResponse = "Drink warm fluids and rest well.";
+        else if (msg.includes("sore throat")) botResponse = "Gargle salt water and avoid cold items.";
+        else if (msg.includes("fatigue")) botResponse = "Try to relax and sleep well.";
+        else if (msg.includes("nausea")) botResponse = "Eat light food and stay hydrated.";
+        else botResponse = "Sorry, I couldn’t understand that. Could you try again?";
+
+        addMessage("bot", botResponse);
+      }
+
+      function goBackHome() {
+        window.location.href = "index.html";
+      }
+    </script>
+  </body>
+</html>
